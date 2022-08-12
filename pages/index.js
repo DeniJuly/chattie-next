@@ -15,6 +15,10 @@ function Home() {
   const [showPopupUser, setShowPopupUser] = useState(false);
 
   const saveChat = () => {
+    if (message.length === 0) {
+      alert("Isi pesannya dulu lah!!");
+      return;
+    }
     let date = new Date();
     addDoc(dbInstance, {
       chat: message,
