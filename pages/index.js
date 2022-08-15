@@ -1,4 +1,5 @@
 import { addDoc, collection, orderBy, query } from 'firebase/firestore';
+import { getSession, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
@@ -9,10 +10,9 @@ import Avatar from './components/avatar/avatar';
 import CardChat from './components/card/card-chat';
 
 function Home() {
-  const [user, setUser] = useState("");
+  const { data: session } = useSession();
   const [message, setMessage] = useState("");
   const dbInstance = collection(database, "chats");
-  const [showPopupUser, setShowPopupUser] = useState(false);
 
   const saveChat = () => {
     if (message.length === 0) {
@@ -23,7 +23,7 @@ function Home() {
     addDoc(dbInstance, {
       chat: message,
       time: date,
-      user: user,
+      user: "test",
     }).then(() => {
       setMessage("");
     });
@@ -39,17 +39,14 @@ function Home() {
     objDiv.scrollTop = objDiv.scrollHeight;
   }, [value]);
 
-  useEffect(() => {
-    if (user.length === 0 && !showPopupUser) {
-      setShowPopupUser(true);
-    }
-  }, [user]);
-
   return (
     <main className="h-screen w-screen bg-black-sidebar grid grid-cols-12">
-      <div className="col-span-3 h-screen flex flex-col">
+      <div className="col-span-4 lg:col-span-3 h-screen flex flex-col">
         {/* Header */}
-        <div className="px-5 flex items-center gap-4 py-4 border-b border-black-border">
+        <div
+          className="px-5 flex items-center gap-4 py-4 border-b border-black-border cursor-pointer"
+          onClick={signOut}
+        >
           <div className="bg-cream-bubble-chat h-10 w-10 rounded-full flex items-center justify-center text-2xl text-black font-medium">
             D
           </div>
@@ -86,7 +83,7 @@ function Home() {
           </div>
         </div>
       </div>
-      <div className="col-span-9 h-screen bg-black-bg-chat flex flex-col">
+      <div className="col-span-8 lg:col-span-9 h-screen bg-black-bg-chat flex flex-col">
         {/* Header */}
         <div className="px-5 flex items-center gap-4 py-4 border-b border-black-border bg-black-sidebar">
           <div className="bg-cream-bubble-chat h-10 w-10 rounded-full flex items-center justify-center text-2xl text-black font-medium">
@@ -215,38 +212,22 @@ function Home() {
           </form>
         </div>
       </div>
-      {showPopupUser && (
-        <div className="fixed w-full h-full left-0 top-0 bg-black bg-opacity-75 flex items-center justify-center flex-col">
-          <h1 className="text-white text-2xl mb-4">Maneh saha teh?</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (user.length === 0) {
-                alert("isi dulu lah");
-                return;
-              }
-              setShowPopupUser(false);
-            }}
-            className="flex flex-col"
-          >
-            <input
-              type="text"
-              className="border border-black-border px-4 py-3 flex-1 rounded-full bg-black-sidebar text-white focus:outline-0 focus:bg-black-border focus:ring-0 mb-2 w-64"
-              placeholder="Ketik nama anda"
-              value={user}
-              onChange={({ target: { value } }) => setUser(value)}
-            />
-            <button
-              type="submit"
-              className="bg-cream-bubble-chat rounded-full px-10 py-3"
-            >
-              Simpan
-            </button>
-          </form>
-        </div>
-      )}
     </main>
   );
 }
 
 export default Home;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+}
