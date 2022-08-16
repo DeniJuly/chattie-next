@@ -1,7 +1,7 @@
 import React from 'react';
 
 function BubbleChat({ chat, myChat, time }) {
-  let timeData = time ? new Date(time?.seconds * 1000) : "00:00";
+  let timeData = time ? new Date(time?.seconds * 1000) : "";
   return (
     <div
       className={`w-max flex flex-col my-2 ${
@@ -17,7 +17,9 @@ function BubbleChat({ chat, myChat, time }) {
       >
         {chat}
       </div>
-      <p className="text-white text-[10px] opacity-50">{`${timeData.getHours()}:${timeData.getMinutes()}`}</p>
+      <p className="text-white text-[10px] opacity-50">
+        {timeData ? `${timeData.getHours()}:${timeData.getMinutes()}` : "00:00"}
+      </p>
     </div>
   );
 }
