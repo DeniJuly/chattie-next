@@ -2,7 +2,6 @@ import { getProviders, getSession, signIn } from 'next-auth/react';
 import React from 'react';
 
 function Signin({ providers }) {
-  console.log("secret", process.env.JWT_SECRET);
   return (
     <main className="w-screen h-screen bg-black-sidebar flex items-center justify-center">
       {Object?.values(providers).map((provider) => (

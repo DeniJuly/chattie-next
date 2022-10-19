@@ -136,8 +136,23 @@ function Home() {
     }
   }, [userData]);
 
+  const readMessage = async () => {
+    const ownChat = doc(
+      database,
+      "users",
+      userData.id,
+      "chats",
+      chatActive.chat_id
+    );
+    await updateDoc(ownChat, {
+      ...chatActive,
+      unread: 0,
+    });
+  };
+
   useEffect(() => {
     if (chatActive.chat_id) {
+      readMessage();
       var objDiv = document.getElementById("chat_body");
       objDiv.scrollTop = objDiv?.scrollHeight;
     }
@@ -145,6 +160,7 @@ function Home() {
 
   useEffect(() => {
     if (chatActive.chat_id) {
+      readMessage();
       const messageRef = collection(
         database,
         `chats/${chatActive?.chat_id}/messages`
@@ -364,7 +380,7 @@ function Home() {
           </div>
           {/* Chat body */}
           <div
-            className="flex flex-1 flex-col px-5 overflow-y-auto scroll-smooth"
+            className="flex flex-1 flex-col overflow-y-auto scroll-smooth px-14"
             id="chat_body"
           >
             {messages?.map((doc, i) => {
@@ -416,13 +432,15 @@ function Home() {
               }}
               className="w-full flex items-center py-2 px-5 gap-5"
             >
-              <input
-                type="text"
-                className="border border-black-border px-4 py-3 flex-1 rounded-full bg-black-sidebar text-white focus:outline-0 focus:bg-black-border focus:ring-0"
-                placeholder="Ketik pesan"
-                value={message}
+              <textarea
+                name="message"
+                id="message"
+                className="resize-y max-h-28 flex-1 border border-black-border px-4 py-3 rounded-3xl bg-black-sidebar text-white focus:outline-0 focus:bg-black-border focus:ring-0"
                 onChange={({ target: { value } }) => setMessage(value)}
-              />
+                value={message}
+                placeholder="Ketik Pesan"
+                rows="1"
+              ></textarea>
               <button
                 type="submit"
                 className="w-12 h-12 flex items-center justify-center rounded-full bg-cream-bubble-chat"
@@ -434,7 +452,7 @@ function Home() {
         </div>
       ) : (
         <div className="col-span-8 lg:col-span-9 h-screen bg-black-bg-chat flex flex-col">
-          <p className="text-center">Hola</p>
+          <p className="text-center text-white">Hola</p>
         </div>
       )}
       <div

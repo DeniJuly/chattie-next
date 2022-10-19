@@ -13,10 +13,10 @@ function CardChat({ id, profile, name, message, unread, handleClick }) {
           alt={name}
           referrerPolicy="no-referrer"
         />
-        <div className="flex-1 flex items-center gap-1 justify-between">
-          <div className="flex-1">
+        <div className="overflow-hidden flex items-center gap-1 justify-between w-full">
+          <div className="flex-1 overflow-hidden">
             <p className="text-white text-base w-fit">{name}</p>
-            <p className="w-fit text-ellipsis text-white opacity-75 text-sm">
+            <p className="w-full truncate text-white opacity-75 text-sm text-left">
               {message}
             </p>
           </div>

@@ -2,7 +2,23 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, create .env.local file and define:
+GOOGLE_ID=
+GOOGLE_SECRET=
+
+NEXTAUTH_URL=http://localhost:3000
+JWT_SECRET=
+
+FIREBASE_API_KEY=
+FIREBASE_APP_ID=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_DATABASE_URL=
+FIREBASE_PROJECT_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_MEANSUREMENT_ID=
+
+and then you can run the development server:
 
 ```bash
 npm run dev

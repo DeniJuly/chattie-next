@@ -9,7 +9,7 @@ function BubbleChat({ chat, myChat, time }) {
       }`}
     >
       <div
-        className={`px-3 py-2 border h-max my-2 text-sm max-w-3/4 ${
+        className={`px-3 py-2 border h-max my-2 text-base max-w-3/4 break-words whitespace-pre-wrap ${
           myChat
             ? "self-end text-black bg-cream-bubble-chat border-black-border rounded-t-xl rounded-l-xl w-max"
             : "text-white bg-black-bubble-chat border-black-border rounded-t-xl rounded-r-xl w-max"
